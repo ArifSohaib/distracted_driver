@@ -1,0 +1,14 @@
+net: "mymodeldef/train_val.prototxt"
+test_iter: 107
+test_interval: 500
+base_lr: 0.001
+lr_policy: "step"
+gamma: 0.01
+stepsize: 5000
+display: 50
+max_iter: 30000
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 3000
+snapshot_prefix: "mymodeldef/snapshots/driver_train1"
+solver_mode: GPU
