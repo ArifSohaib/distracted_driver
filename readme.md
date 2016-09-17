@@ -57,13 +57,18 @@ The file has been commented to be usable for tutorial purposes.
 
 Once we have these txt files, we can use the file create_distracted.sh to create the lmdb files (side-note:I know it could be named better but I could not think of anything else at the time).
 
+After creating the lmdb files, we need the mean image. This can be created using the make_driver_mean.sh which runs a command line tool called 'compute_image_mean' on the training files and stores the result in a binaryproto file.
 
 ##Getting the pre-trained model and network definition files
 In most cases, training a large network with little training data will lead to over-fitting on the training set and low accuracy in validation and testing.
 To solve this issue, a pre-trained network can be used.
 This network has already learned the lower level features in its earlier layers. For example it 'knows' what a dots and shapes look like in the lowest layers and in higher ones, it 'knows' how they are combined in an image. Its only in the highest layer that it actually does classification. So by 'freezing' the lower layers, the network retains information about what an image looks like but the highest layers can be retrained to actually recognize/categorize the image.
 
-To do this, we need to get 4 files and modify 3 of them.
+To do this, we need to get 4 files and modify 3 of them. The files depend on the network you are training.
+In my case, it was Alexnet that comes with caffe.
+The files required can be found in the caffe folder under the models folder.
+You can find solver.prototxt, train_val.prototxt and deploy.prototxt here.
+The trained model can be found here: https://github.com/BVLC/caffe/tree/master/models/bvlc_alexnet
 
 ##Modifying the files
 
