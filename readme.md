@@ -19,7 +19,7 @@ defines the network being trained
 defines the network for classification(only minor changes from train_val required)
 
 ### Training
-#####: train.sh:
+##### train.sh:
 script file to train the network
 
 ### Classification
