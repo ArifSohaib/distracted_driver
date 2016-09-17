@@ -1,6 +1,6 @@
 #Tutorial for using caffe pre-trained model
 
-##File descriptions
+##Brief File descriptions
 
 ###Dataset preparation and preprocessing
 ##### make_datasets.py:
@@ -12,22 +12,28 @@ finds the mean image of the training set to be used for normalization by caffe l
 
 ### Network definition
 ##### solver.prototxt:
-
+defines the main network parameters and file locations
 ##### train_val.prototxt:
-
+defines the network being trained
 ##### deploy.prototxt:
-
+defines the network for classification(only minor changes from train_val required)
 
 ### Training
-#####: train.sh
+#####: train.sh:
+script file to train the network
 
 ### Classification
 ##### classify_driver.py:
+using the deploy file on labeled test set to view results and test accuracy on each class
 ##### classify_driver_real.py:
+using the deploy file on unlabeled test data for final results
 ##### classify_driver_batch.py:
+Experimental file to use batch classification. Works but currently running into memory issues.
+If you know a fix, please suggest.
 
 ### Utility
 ##### batch_load.py:
+Utility file used by the classify_driver_batch.py to load classification images in batch
 
 ##Preparing the dataset
 
