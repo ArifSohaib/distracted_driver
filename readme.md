@@ -72,8 +72,8 @@ The trained model can be found in the description here: https://github.com/BVLC/
 It is separate from the main repo as the size is too large.
 
 ##Modifying the files
+You need to modify the model to point to your data and change the number of classifiers as well as disable training on some of the earlier nodes.
 #####solver.prototxt:
-You also need to modify the model to point to your data and change the number of classifiers as well as disable training on some of the earlier nodes.
 If you stored your model somewhere else or changed the filename, then you need to mention the location in the solver.prototxt file.
 The 'net' parameter defines the file where your network is stored. Originally it will be something like this:\n
 net: "models/bvlc_alexnet/train_val.prototxt"\n
