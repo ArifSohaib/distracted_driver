@@ -97,7 +97,36 @@ In my case, I used the default 'step' policy which returns the learning rate as 
 'snapshot_prefix' defines the relative location(relative to caffe root folder) and file prefix of the solver file. Note that if the folder in the location does not exits, you will have to manually create it.\n
 'solver_mode' specifies if the model should run on the CPU or GPU. \n
 #####train_val.prototxt:
+This file defines the network.
+In our case, we are retraining the networks's last layers so we need to disable the learning on the others.
+Additionally, we need to point to our data source(the lmdb file created in the last section) and change the final classification layer to only output the number of categories we have.
+Optionally, we need to change the location of the mean_image.
 
+The layers are defined in a JSON like syntax.
+The first 2 layers are data layers.
+
+Within the top layers there is a section called transrofm_param which defines any transformation applied to the image.
+Here there is a parameter called mean_image. This needs to point to the relative location of your mean image file(again, relative to the caffe directory).
+In my case, the mean image was created in mydata/distracted_driver/ by the script make_driver_mean.sh by the name driver_mean.binaryproto so the parameter is "mydata/distracted_driver/driver_mean.binaryproto".
+
+The parameter 'top' in the layer defines the layer being output.
+In later layers, the parameter 'bottom' defines the name of the layer where the given layer gets its input.
+Layers that don't have any parameters, like relu, should have the same name for the top and bottom parameters.
+
+The phase section defines weather to use this data layer in training(TRAIN) or validation(TEST).
+
+The data_param defines the location of the data. You need to change it to the relative location of the LMDB file of the training data, in case of TRAIN phase.
+and validation data in case of the TEST phase.
+They both can also have different batch sizes and as mentioned in the previous section, the batch_size of the TEST phase needs to be equal to the size of the validation set divided by test_iter from the solver file.
+The backend defines which type of data is being used.
+
+After this, we need to set lr_mult: 0 (this is multiplied by the base_lr and gamma) for every layer that we don't want to train. The classification layer(the last layer) and the layer before that was retrained in my case to I kept lr_mult: 1 for them.
+
+In the classification layer(fc8 in my case) we need to set num_output to the number of categories we need to classify.
+
+With these changes we are ready to re-train the network on our data/categories.
+
+#####deploy.prototxt:
 
 ##Running the training
 
