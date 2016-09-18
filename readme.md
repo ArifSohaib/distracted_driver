@@ -68,9 +68,36 @@ To do this, we need to get 4 files and modify 3 of them. The files depend on the
 In my case, it was Alexnet that comes with caffe.
 The files required can be found in the caffe folder under the models folder.
 You can find solver.prototxt, train_val.prototxt and deploy.prototxt here.
-The trained model can be found here: https://github.com/BVLC/caffe/tree/master/models/bvlc_alexnet
+The trained model can be found in the description here: https://github.com/BVLC/caffe/tree/master/models/bvlc_alexnet
+It is separate from the main repo as the size is too large.
 
 ##Modifying the files
+#####solver.prototxt:
+You also need to modify the model to point to your data and change the number of classifiers as well as disable training on some of the earlier nodes.
+If you stored your model somewhere else or changed the filename, then you need to mention the location in the solver.prototxt file.
+The 'net' parameter defines the file where your network is stored. Originally it will be something like this:\n
+net: "models/bvlc_alexnet/train_val.prototxt"\n
+Note that the location is defined relative to the caffe root folder.
+In my case, the model was in a folder called mymodeldef in the caffe folder so I changed it to this:\n
+net: "mymodeldef/train_val.prototxt"\n
+The 'test_iter' parameter defines the number of forward passes to run with the batches of validation images, while the batch_size is defined in the train_val file, I will explain how to do that change in the next section. These should be defined in a way that covers the whole validation set.\n
+For example in my case, the validation set consisted of 4494 images so I defined the test_iter as 107 and batch_size in test_val.prototxt as 42 so 107x42=4494.
+The numbers were found by finding the factors of the size of the validation set. This is the reason I didn't take exactly 20% of training images as validation set.\n
+'test_interval' defines the number of iterations after which the training temporarily stops and the model is checked against the validation set instead. The accuracy on the validation set is displayed after this number of iterations.\n
+'base_lr' is the base learning rate for all layers. You can define a different learning rate for a layer in the train_val file and that will be multiplied by the base_lr.\n
+'lr_policy' defines how the base_lr is changed. Possible values and their description is defined here https://github.com/BVLC/caffe/blob/master/src/caffe/proto/caffe.proto#L157-L172
+In my case, I used the default 'step' policy which returns the learning rate as base_lr * gamma ^ (floor(iter / step)) \n
+'gamma' a value indicating how much the learning rate should change. It is used slightly differently for each lr_policy.\n
+'stepsize' a value indicating how often the learning rate should be decreased.\n
+'display' is the number of iterations after which the loss of the model is displayed\n
+'max_iter' is the maximum number of iterations that the model should run for. It can be manually stopped earlier if needed.\n
+'momentum' the weight of the previous update. Full details here: http://caffe.berkeleyvision.org/tutorial/solver.html (also contains details on the other parameters)\n
+'weight_decay' parameter to control the effect of regularization added to the weights. If the number of examples you have is low, reduce this term. For more details see http://stackoverflow.com/questions/32177764/what-is-weight-decay-meta-parameter-in-caffe \n
+'snapshot' is the number of iterations after which the model is saved in a caffemodel file. The saved snapshot can be used to continue training or fine-tuning\n
+'snapshot_prefix' defines the relative location(relative to caffe root folder) and file prefix of the solver file. Note that if the folder in the location does not exits, you will have to manually create it.\n
+'solver_mode' specifies if the model should run on the CPU or GPU. \n
+#####train_val.prototxt:
+
 
 ##Running the training
 
