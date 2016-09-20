@@ -8,7 +8,7 @@ I am not an expert in caffe but this project was successfully completed by my as
 I used various sources from the Internet to learn caffe and fix issues I faced so some code is modified from other sources which I did not keep track of.
 I apologize for not crediting them. If you find such snippits, please inform me and I will add them.
 
-#Tutorial for using caffe pre-trained model
+#Tutorial for using caffe pre-trained model/fine-tuning
 
 ##Brief File descriptions
 
