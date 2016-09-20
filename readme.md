@@ -35,7 +35,10 @@ using the deploy file on labeled test set to view results and test accuracy on e
 using the deploy file on unlabeled test data for final results
 ##### classify_driver_batch.py:
 Experimental file to use batch classification. Works but currently running into memory issues.
+Be warned that this file could crash your system due to the memory issues.
 If you know a fix, please suggest.
+##### classify_driver_batch_testing.py:
+Experimental file that uses the batch loader on a much smaller subset and thus does not crash and verifies that the loader works.
 
 ####Utility
 ##### batch_load.py:
@@ -53,7 +56,7 @@ All images were in jpg format and can be viewed directly however, caffe does not
 For training I decided to put the images in lmdb format as the alternative was hdf5 and I was running into memory issues with it and lmdb is also the most used format with caffe.
 
 To prepare the lmdb file you need two text files with the location and category of the dataset images. Manually making these files for large datasets is almost impossible so I made a python script to do this for me. This script is the make_datasets.py file.
-The file has been commented to be usable for tutorial purposes.
+The file has been annotated to be usable for tutorial purposes.
 
 Once we have these txt files, we can use the file create_distracted.sh to create the lmdb files (side-note:I know it could be named better but I could not think of anything else at the time).
 
@@ -143,10 +146,16 @@ Next we need to change the remove the accuracy(type:Accuracy) and loss(type:Soft
 You can verify this by seeing that both accuracy and loss layers take as input("bottom") the final classification layer(in our case fc8) and the labels and in deployment we don't have the labels.
 
 ##Running the training
-Running the training is as simple as running one line on the terminal as you can see in the code of train.sh.
-./build/tools/caffe train -solver mymodeldef/solver.prototxt -weights models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel
-The solver paramter here needs to point to your solver file,
+Running the training is as simple as running one line on the terminal as you can see in the code of train.sh.\n
+./build/tools/caffe train -solver mymodeldef/solver.prototxt -weights models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel\n
+The solver parameter here needs to point to your solver file,
 The weights parameter points to the pre-trained model you downloaded in the beginning and can be left blank if you want to train from scratch or replaced with one of your snapshots if you want to resume training.
 Note that this command needs to run from the caffe root directory.
 
 ##Running the prediction
+If your test set is large, a small step you should do before running the classifier on the full set is to take a small subset of it and label it.
+To properly test for bias, you should use about the same number of images from each category. For example, in my case when I trained the classifier from scratch, the resulting model was highly biased to one of the classes, the class with the fewest training examples but I mistook it for a good classifier as I didn't test it on other classes until later. Note, however, that you might need to manually label this subset unless your training set is large enough that you can set aside a test set in addition to the training and validation sets.
+
+That said, in my case, you will notice that there are 3 files for prediction(classify_driver.py, classify_driver_real.py and classify_driver_batch.py). All of these use Caffe's python interface so you should make sure to install it when installing caffe, if you have trouble with this you can install Nvidia DIGITS which also installs pycaffe.
+
+The classify_driver.py file is the one that is used to test the model on unseen test images.
