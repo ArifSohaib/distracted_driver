@@ -65,7 +65,7 @@ To solve this issue, a pre-trained network can be used.
 This network has already learned the lower level features in its earlier layers. For example it 'knows' what a dots and shapes look like in the lowest layers and in higher ones, it 'knows' how they are combined in an image. Its only in the highest layer that it actually does classification. So by 'freezing' the lower layers, the network retains information about what an image looks like but the highest layers can be retrained to actually recognize/categorize the image.
 
 To do this, we need to get 4 files and modify 3 of them. The files depend on the network you are training.
-In my case, it was Alexnet that comes with caffe.
+In my case, it was Caffenet that comes with caffe.
 The files required can be found in the caffe folder under the models folder.
 You can find solver.prototxt, train_val.prototxt and deploy.prototxt here.
 The trained model can be found in the description here: https://github.com/BVLC/caffe/tree/master/models/bvlc_alexnet
@@ -143,5 +143,10 @@ Next we need to change the remove the accuracy(type:Accuracy) and loss(type:Soft
 You can verify this by seeing that both accuracy and loss layers take as input("bottom") the final classification layer(in our case fc8) and the labels and in deployment we don't have the labels.
 
 ##Running the training
+Running the training is as simple as running one line on the terminal as you can see in the code of train.sh.
+./build/tools/caffe train -solver mymodeldef/solver.prototxt -weights models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel
+The solver paramter here needs to point to your solver file,
+The weights parameter points to the pre-trained model you downloaded in the beginning and can be left blank if you want to train from scratch or replaced with one of your snapshots if you want to resume training.
+Note that this command needs to run from the caffe root directory
 
 ##Running the prediction
