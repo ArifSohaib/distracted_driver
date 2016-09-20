@@ -18,7 +18,7 @@ IMAGE_CATS = os.listdir(IMAGE_ROOT)
 
 net = caffe.Classifier(MODEL_FILE, PRETRAINED,
 mean=np.load(caffe_root + 'python/caffe/imagenet/ilsvrc_2012_mean.npy').mean(1).mean(1), #The file mentioned here is the mean of imagenet, you can also use your mean image after converting it to .npy
-channel_swap=(2,1,0),
+channel_swap=(2,1,0), #The color channels are different in the main caffe C++ implementation and the python interface https://skyuuka.wordpress.com/2015/04/14/about-channel-swap-in-caffe/
 raw_scale=255,
 image_dims=(256, 256))
 
