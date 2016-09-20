@@ -127,6 +127,20 @@ In the classification layer(fc8 in my case) we need to set num_output to the num
 With these changes we are ready to re-train the network on our data/categories.
 
 #####deploy.prototxt:
+The deploy.prototxt can be made by simply copying your train_val.prototxt and making a few changes. This is actually one of caffe's weaknesses as programmers used to object oriented code would want to simplify this by using just a transformation of train_val instead of copying it.\n
+To convert train_val to deploy, we need to change the data layer. In training we knew exactly where the images were coming from, however, in testing and deployment we don't moreover, in training we also had a validation phase called 'test' which is not needed in the deployment. So the data layer is changed to reflect these changes.
+Remove your entire data layer and replace it with something like this:\n
+layer {
+  name: "data"
+  type: "Input"
+  top: "data"
+  input_param { shape: { dim: 10 dim: 3 dim: 227 dim: 227 } }
+}\n
+The dim in the shape of the input_param represnt the number of images, then the color channels, followed by the height and then the width.
+Don't worry if your test images will have different dimensions, that will be fixed in preprocessing in the classification script.
+
+Next we need to change the remove the accuracy(type:Accuracy) and loss(type:SoftmaxWithLoss) layers from the train_val and insert a softmax layer. The reason for this is that during training and validation, we had labels to test our loss and accuracy while in deployment, we have unlabeled data.
+You can verify this by seeing that both accuracy and loss layers take as input("bottom") the final classification layer(in our case fc8) and the labels and in deployment we don't have the labels.
 
 ##Running the training
 
