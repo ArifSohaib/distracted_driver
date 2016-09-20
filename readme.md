@@ -1,8 +1,12 @@
 ###Some Notes:
 ######NOTE1:
 This is my first tutorial so constructive feed-back and questions are highly appreciated and I apologize for any mistakes.
+Feel free to contact me at arifsohaib.sa@gmail.com.
 ######NOTE2:
 I am not an expert in caffe but this project was successfully completed by my as my first kaggle entry and I found caffe tutorials hard to come by so I thought I would share.
+######NOTE3:
+I used various sources from the Internet to learn caffe and fix issues I faced so some code is modified from other sources which I did not keep track of.
+I apologize for not crediting them. If you find such snippits, please inform me and I will add them.
 
 #Tutorial for using caffe pre-trained model
 
@@ -156,6 +160,9 @@ Note that this command needs to run from the caffe root directory.
 If your test set is large, a small step you should do before running the classifier on the full set is to take a small subset of it and label it.
 To properly test for bias, you should use about the same number of images from each category. For example, in my case when I trained the classifier from scratch, the resulting model was highly biased to one of the classes, the class with the fewest training examples but I mistook it for a good classifier as I didn't test it on other classes until later. Note, however, that you might need to manually label this subset unless your training set is large enough that you can set aside a test set in addition to the training and validation sets.
 
-That said, in my case, you will notice that there are 3 files for prediction(classify_driver.py, classify_driver_real.py and classify_driver_batch.py). All of these use Caffe's python interface so you should make sure to install it when installing caffe, if you have trouble with this you can install Nvidia DIGITS which also installs pycaffe.
+That said, in my case, you will notice that there are 3 files for prediction(classify_driver.py, classify_driver_real.py classify_driver_batch_testing.py and classify_driver_batch.py). All of these use Caffe's python interface so you should make sure to install it when installing caffe, if you have trouble with this you can install Nvidia DIGITS which also installs pycaffe.
 
-The classify_driver.py file is the one that is used to test the model on unseen test images.
+The classify_driver.py file is the one that is used to test the model on unseen labeled test images and produces a csv file.
+The classify_driver_real.py classifies each unlabeled image in the test set one by one and produces a csv file.
+Both files have been annotated to be easy to modify and use.
+The classify_driver_batch.py and classify_driver_batch_testing.py are experimental files to test the batch loader. They are similar to the other two but have not been annotated.
